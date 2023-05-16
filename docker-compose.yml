@@ -1,0 +1,41 @@
+version: '3.9'
+services:
+  app:
+    build: ./app/.
+    image: pauljose97/737-2023-t1-prac5p-app
+    container_name: app
+    ports:
+      - "8080:3030"
+    volumes:
+      - ./src:/app/src
+    healthcheck:
+      test: curl --fail http://localhost:3030 || exit 1
+      interval: 30s
+      timeout: 3s
+      retries: 5
+      start_period: 10s
+    networks:
+      my-network:
+        aliases:
+          - app
+  users:
+    build: ./users/.
+    image: pauljose97/737-2023-t1-prac5p-users
+    container_name: users
+    expose:
+      - "3030"
+    volumes:
+      - ./src:/users/src
+    healthcheck:
+      test: curl --fail http://localhost:3030 || exit 1
+      interval: 30s
+      timeout: 3s
+      retries: 5
+      start_period: 10s
+    networks:
+      my-network:
+        aliases:
+          - users
+networks:
+  my-network:
+    driver: bridge
