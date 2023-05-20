@@ -1,6 +1,6 @@
 import express from 'express';
 import { logInfoMessage } from './logger.js';
-import { addUser, getUser, getUsers, doesUserExist, verifyAdmin, doesAdminExist } from './users.js';
+import { addUser, getUser, getUsers, doesUserExist, deleteUser, updateUser, verifyAdmin, doesAdminExist } from './users.js';
 import crypto from 'crypto';
 
 const router = express.Router();
