@@ -1,6 +1,7 @@
 import User from "./schema/user.js";
 import { logger } from "./logger.js";
 
+// Add a new user
 const addUser = (username, apiKey) => {
     const user = new User({
         username,
@@ -15,6 +16,7 @@ const addUser = (username, apiKey) => {
     });
 };
 
+// Get a user by username and API key
 const getUser = async (username, apiKey) => {
     return await User.findOne({ username, apiKey }).then(existingUser => {
         if (existingUser) {
@@ -28,6 +30,7 @@ const getUser = async (username, apiKey) => {
     });
 };
 
+// Get all users
 const getUsers = async () => {
     return await User.find({}).then(users => {
         return users;
@@ -37,6 +40,7 @@ const getUsers = async () => {
     });
 };
 
+// Check if a user exists
 const doesUserExist = async (username) => {
     return await User.findOne({ username }).then(existingUser => {
         if (existingUser) {
@@ -50,10 +54,40 @@ const doesUserExist = async (username) => {
     });
 };
 
+// Delete a user
+const deleteUser = async (username) => {
+    return await User.deleteOne({ username }).then(deletedUser => {
+        if (deletedUser) {
+            return true;
+        } else {
+            return false;
+        }
+    }).catch(error => {
+        logger.error("Error deleting user:", error);
+        return false;
+    });
+};
+
+// Update a user's API key
+const updateUser = async (username, apiKey) => {
+    return await User.findOneAndUpdate({ username }, { apiKey }).then(updatedUser => {
+        if (updatedUser) {
+            return true;
+        } else {
+            return false;
+        }
+    }).catch(error => {
+        logger.error("Error updating user:", error);
+        return false;
+    });
+};
+
+// Verify that the user is an admin
 const verifyAdmin = (username, apiKey) => {
     return username === "pauljose@live.com" && apiKey === "secret";
 };
 
+// Check if the admin user exists
 const doesAdminExist = (username) => {
     if (username === "pauljose@live.com") {
         return true;
@@ -67,6 +101,8 @@ export {
     getUser,
     getUsers,
     doesUserExist,
+    deleteUser,
+    updateUser,
     verifyAdmin,
     doesAdminExist
 };
